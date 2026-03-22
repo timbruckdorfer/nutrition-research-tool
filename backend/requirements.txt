@@ -1,0 +1,30 @@
+# MCP (Model Context Protocol)
+# Note: Install with: pip install git+https://github.com/modelcontextprotocol/python-sdk.git
+# mcp @ git+https://github.com/modelcontextprotocol/python-sdk.git
+
+# LLM API
+openai>=1.12.0                # OpenAI API for GPT-4/GPT-3.5
+
+# PDF Processing
+pymupdf>=1.23.0               # High-performance PDF text extraction
+pytesseract>=0.3.13           # OCR for scanned/image-based PDFs
+pdf2image>=1.17.0             # Convert PDF pages to images for OCR
+pillow>=12.1.0                # Image processing (required by pytesseract)
+# Alternative: PyPDF2, pdfplumber (pymupdf is fastest for scientific papers)
+
+# Web Framework (for Phase 3)
+fastapi>=0.109.0              # Modern async web framework
+uvicorn[standard]>=0.27.0     # ASGI server to run FastAPI
+python-multipart>=0.0.6       # Handle file uploads
+
+# Excel Generation
+openpyxl>=3.1.2               # Create/modify Excel files (.xlsx)
+pandas>=2.2.0                 # Data manipulation (optional but helpful)
+
+# Utilities
+python-dotenv>=1.0.0          # Load .env files for API keys
+pydantic>=2.6.0               # Data validation (comes with FastAPI)
+
+# Development (optional but recommended)
+pytest>=8.0.0                 # Testing framework
+httpx>=0.26.0                 # HTTP client for testing FastAPI
