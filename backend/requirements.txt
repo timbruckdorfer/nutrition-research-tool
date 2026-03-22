@@ -7,10 +7,10 @@ openai>=1.12.0                # OpenAI API for GPT-4/GPT-3.5
 
 # PDF Processing
 pymupdf>=1.23.0               # High-performance PDF text extraction
-pytesseract>=0.3.13           # OCR for scanned/image-based PDFs
-pdf2image>=1.17.0             # Convert PDF pages to images for OCR
-pillow>=12.1.0                # Image processing (required by pytesseract)
-# Alternative: PyPDF2, pdfplumber (pymupdf is fastest for scientific papers)
+# OCR deps (optional -- only needed locally if processing scanned PDFs)
+# pytesseract>=0.3.13
+# pdf2image>=1.17.0
+# pillow>=12.1.0
 
 # Web Framework (for Phase 3)
 fastapi>=0.109.0              # Modern async web framework
@@ -25,6 +25,6 @@ pandas>=2.2.0                 # Data manipulation (optional but helpful)
 python-dotenv>=1.0.0          # Load .env files for API keys
 pydantic>=2.6.0               # Data validation (comes with FastAPI)
 
-# Development (optional but recommended)
-pytest>=8.0.0                 # Testing framework
-httpx>=0.26.0                 # HTTP client for testing FastAPI
+# Development (install locally, not needed in production)
+# pytest>=8.0.0
+# httpx>=0.26.0

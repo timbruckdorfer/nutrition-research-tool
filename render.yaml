@@ -12,4 +12,4 @@ services:
       - key: OPENAI_MODEL
         value: gpt-4o
       - key: PYTHON_VERSION
-        value: "3.12"
+        value: "3.12.0"
