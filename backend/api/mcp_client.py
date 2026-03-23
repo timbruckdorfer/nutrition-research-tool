@@ -9,6 +9,7 @@ In production, you could run MCP server separately and connect via stdio.
 """
 
 import sys
+import asyncio
 import json
 from pathlib import Path
 from typing import Dict, Any
@@ -65,9 +66,11 @@ async def analyze_paper_via_mcp(pdf_path: str) -> Dict[str, Any]:
     """
     
     try:
-        # Step 1: Extract PDF text
-        pdf_result = pdf_extractor.extract_text(pdf_path)
-        
+        # All tool calls are synchronous (blocking OpenAI HTTP requests).
+        # Run them in threads so the event loop stays free for status polling.
+
+        pdf_result = await asyncio.to_thread(pdf_extractor.extract_text, pdf_path)
+
         if not pdf_result["success"]:
             return {
                 "success": False,
@@ -77,10 +80,9 @@ async def analyze_paper_via_mcp(pdf_path: str) -> Dict[str, Any]:
         
         paper_text = pdf_result["text"]
         file_name = pdf_result["file_name"]
-        
-        # Step 2: Analyze metadata
-        metadata_result = llm_analyzer.analyze_metadata(paper_text)
-        
+
+        metadata_result = await asyncio.to_thread(llm_analyzer.analyze_metadata, paper_text)
+
         if not metadata_result["success"]:
             return {
                 "success": False,
@@ -88,10 +90,9 @@ async def analyze_paper_via_mcp(pdf_path: str) -> Dict[str, Any]:
                 "step": "metadata_analysis",
                 "file_name": file_name
             }
-        
-        # Step 3: Analyze methodology
-        methodology_result = llm_analyzer.analyze_methodology(paper_text)
-        
+
+        methodology_result = await asyncio.to_thread(llm_analyzer.analyze_methodology, paper_text)
+
         if not methodology_result["success"]:
             return {
                 "success": False,
@@ -99,16 +100,14 @@ async def analyze_paper_via_mcp(pdf_path: str) -> Dict[str, Any]:
                 "step": "methodology_analysis",
                 "file_name": file_name
             }
-        
-        # Step 4: Combine results
+
         combined_data = {
             "file_name": file_name,
             **metadata_result["data"],
             **methodology_result["data"]
         }
-        
-        # Step 5: Translate combined data to Spanish
-        spanish_result = llm_analyzer.translate_to_spanish(combined_data)
+
+        spanish_result = await asyncio.to_thread(llm_analyzer.translate_to_spanish, combined_data)
         spanish_data = spanish_result["data"] if spanish_result["success"] else combined_data
         
         return {
